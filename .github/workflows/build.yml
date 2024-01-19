@@ -2,30 +2,8 @@ name: Mongoose Shelly build
 on:
   push:
 jobs:
-  release:
-    name: Create a new release
-    runs-on: ubuntu-latest
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-      release_version: ${{ steps.read_version.outputs.version }}
-    steps:
-    - name: Read Version
-      id: read_version
-      run: |
-        echo ::set-output name=version::${GITHUB_REF#refs/*/}
-    - name: Create Release
-      uses: actions/create-release@v1
-      id: create_release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: release-${{ steps.read_version.outputs.version }}
-        release_name: Release ${{ steps.read_version.outputs.version }}
-        draft: false
-        prerelease: false
   build:
     name: Build for different Shelly models
-    needs: release
     strategy:
       matrix:
         hwModel:    [ShellyPlugS]
